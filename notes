@@ -1,0 +1,70 @@
+NODE.JS
+
+-so first we import the http module that includes a number of tools for working with HTTP requests and responses
+- the create server takes one argument, a function that is called for every HTTP request.
+
+- The read file method takes a file name and a callback, inside the callback we send the contents on the file. it reads the the entire contents of the file
+the callback is passed two arguments(err,data). where data is the contents of the file
+- then response.end gets called and that is what shows the text, it signals to the server that the message should be complete
+
+- with req.url we are getting getting the url that is being sent to the req object. then we set the fileName to index.html and check if the url length is
+greater than one, if it is, that means that the url is more thatn '/', if it is more than that, we use the substring method to strip off the / and set the
+filename to what ever was seny to the url and then we console.log that filename. if you put /dude the console should print out dude
+
+- now we are using the path module which has utilities fro handling and transforming file paths . we use path.resolve whihc resolves a sequence of paths or path
+segments into an absolute path
+
+- so far for handling errors it is pretty simple we put it in the filePath callback and check for errors if there is an error we res.writeHead(404) and that
+method will send a reposne header to the request
+
+- ok so what does fs.readFile do
+
+MIME TYPES
+- also know as a media type, is a two- part identification for file formates
+- a browser needs a way to tell what type of file is what and if it should render the response as HTML, use a plug in to play music or download a file to the
+hard drive. but Http responses do not have file extentions to tell them, instead the server tells the browser what type of information is in the response
+- you can do this by specifying the MIME type or media type in the response's content type header. so you make a request to the server and the server
+tells the browser what it should do in the response media type
+- we can use res.setHeader
+
+
+WHAT IS HAPPENING WITH THE SOCKETS
+-first thing that happens is setting up the websockets.
+- we use the ws module to easily communicate via websockets. then we use the server property to create a working WebSocket server. Then we create a new
+WebSocketServer and set a property of port on that object
+- we will not need a module.exports assignment. the code in webSockets-server.js will run when imported.
+- now we have to handle connections, we use the .on() method which takes a two paramters, one to determine what is going to be the trigger and the other one for
+a callback function that is going to be run whenever a connection is established. the callback function takes one parameter and it is called socket
+when a client makes a connection to our websocket server, we have access to that connection via this socket object.
+
+- we then set up the echo server.
+- we set up a .on method right on the client object(socket.on('message',callback)) this will have access to our client and will call the callback on every
+message sent.
+-it will console.log() out the message on the sever
+- we then connect it to index.js by importing the websocket server module
+- then we use the wscat to connect to the websocker Server
+- we also created an array called messages that will hold the entirety of all the chat logs. in a larger application this would be a database like mongoDB
+- so in the socket.on callback function, after every message sent from the client we push them to the array called messages.
+-with a forEach loop inside of the ws.on callback we send all the messages to the newly connected user
+
+- the last thing that we do is send new messages to all users. ws.clients keeps track of all the connections wia its client property so we just call a forEach loop
+on that object and send the data with a .send(data)
+
+BRONZE CHALLENGE:
+- up date the message handler so that every message recieved is sent twice to each user.
+- we did this by putting a for loop on the socket.on method.
+
+SILVER SPEAK EASY:
+- send all the previous messages to the user if they input a certain phrase
+- to solve this we took out the sending for loop from the on connect method and put it in the on message method. then on every message we check to see if an user put in
+the special word. if they did then all the prevous texts were put in
+
+
+
+
+-Babel is a compiler and its job is to translate ES6 into syntax that is equivalent ES5 code to be run by a brower's javascript engine
+- to use babel effetively. we will need to install a few npm modules. to create an automated build process. we will use Babel to compile the ES6 code to ES5
+Browserify to bundle your modules together into a single file, and Babelify to make the two work together and we will finally use Watchify to trigger the build proccess
+
+
+- so we already built the chatterbox server and it serves out static files and handles communication over websockets
